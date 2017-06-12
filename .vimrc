@@ -26,13 +26,13 @@ Plug 'haya14busa/incsearch.vim'
 " JavaScript
 
 " indenting
-Plug 'pangloss/vim-javascript'
-Plug 'nathanaelkane/vim-indent-guides'
+" Plug 'pangloss/vim-javascript'
+" Plug 'nathanaelkane/vim-indent-guides'
 
 " syntax
-Plug 'jelera/vim-javascript-syntax'
+" Plug 'jelera/vim-javascript-syntax'
 " Plug 'Valloric/YouCompleteMe'
-Plug 'marijnh/tern_for_vim'
+" Plug 'marijnh/tern_for_vim'
 
 call plug#end()
 
