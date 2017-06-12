@@ -2,6 +2,12 @@
 
 My personal vimrc setup
 
+Tested on:
+
+* macOS Sierra 10.12.5
+* iTerm2 Build 3.0.15
+* VIM - Vi IMproved 8.0
+
 ## Developer Profile
 
 * Front-End JavaScript Developer (JavaScript)
