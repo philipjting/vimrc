@@ -99,10 +99,11 @@ augroup END
 set list listchars=tab:»·,trail:·,nbsp:·
 
 " tab functions
-set tabstop=4
-set shiftwidth=4
+" Default is 2 spaces per tab, and spaces for tab
+set tabstop=2
+set shiftwidth=2
 set shiftround
-" set expandtab
+set expandtab
 
 map <Leader>ss :set expandtab<CR>
 map <Leader>tt :set noexpandtab<CR>
