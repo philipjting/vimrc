@@ -1,9 +1,55 @@
-" original file from thoughtbot dotfiles
+" PLUGINS
+"
+" Specify a directory for plugins (for Neovim: ~/.local/share/nvim/plugged)
+call plug#begin('~/.vim/plugged')
+
+" colorschemes
+Plug 'flazz/vim-colorschemes'
+Plug 'godlygeek/csapprox'
+
+" path finder
+Plug 'ctrlpvim/ctrlp.vim'
+
+" autocomplete
+Plug 'Raimondi/delimitMate'
+
+" commenting
+Plug 'scrooloose/nerdcommenter'
+
+" UI
+Plug 'vim-airline/vim-airline'
+
+" Search Highlight
+Plug 'haya14busa/incsearch.vim'
+
+
+" JavaScript
+
+" indenting
+Plug 'pangloss/vim-javascript'
+Plug 'nathanaelkane/vim-indent-guides'
+
+" syntax
+Plug 'jelera/vim-javascript-syntax'
+" Plug 'Valloric/YouCompleteMe'
+Plug 'marijnh/tern_for_vim'
+
+call plug#end()
+
+
+
+
+" DEFINITIONS
+" 
+" Colors and Themes
+
+set background=light
+colorscheme PaperColor
 
 " Leader
 let mapleader = " "
 
-set backspace=2   " Backspace deletes like most programs in insert mode
+"set backspace=2   " Backspace deletes like most programs in insert mode
 set nobackup
 set nowritebackup
 set noswapfile    " http://robots.thoughtbot.com/post/18739402579/global-gitignore#comment-458413287
@@ -17,78 +63,62 @@ set autowrite     " Automatically :write before running commands
 " Switch syntax highlighting on, when the terminal has colors
 " Also switch on highlighting the last used search pattern.
 if (&t_Co > 2 || has("gui_running")) && !exists("syntax_on")
-  syntax on
+    syntax on
 endif
-
-if filereadable(expand("~/.vimrc.bundles"))
-  source ~/.vimrc.bundles
-endif
-
-" Load matchit.vim, but only if the user hasn't installed a newer version.
-if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
-  runtime! macros/matchit.vim
-endif
-
-filetype plugin indent on
 
 augroup vimrcEx
-  autocmd!
+    autocmd!
 
-  " When editing a file, always jump to the last known cursor position.
-  " Don't do it for commit messages, when the position is invalid, or when
-  " inside an event handler (happens when dropping a file on gvim).
-  autocmd BufReadPost *
-    \ if &ft != 'gitcommit' && line("'\"") > 0 && line("'\"") <= line("$") |
-    \   exe "normal g`\"" |
-    \ endif
+    " When editing a file, always jump to the last known cursor position.
+    " Don't do it for commit messages, when the position is invalid, or when
+    " inside an event handler (happens when dropping a file on gvim).
+    autocmd BufReadPost *
+                \ if &ft != 'gitcommit' && line("'\"") > 0 && line("'\"") <= line("$") |
+                \   exe "normal g`\"" |
+                \ endif
 
-  " Set syntax highlighting for specific file types
-  autocmd BufRead,BufNewFile Appraisals set filetype=ruby
-  autocmd BufRead,BufNewFile *.md set filetype=markdown
-  autocmd BufRead,BufNewFile .{jscs,jshint,eslint}rc set filetype=json
+    " Set syntax highlighting for specific file types
+    autocmd BufRead,BufNewFile *.md set filetype=markdown
+    autocmd BufRead,BufNewFile .{jscs,jshint,eslint}rc set filetype=json
 
-  " Enable spellchecking for Markdown
-  autocmd FileType markdown setlocal spell
+    " Enable spellchecking for Markdown
+    autocmd FileType markdown setlocal spell
 
-  " Automatically wrap at 80 characters for Markdown
-  autocmd BufRead,BufNewFile *.md setlocal textwidth=80
+    " Automatically wrap at 80 characters for Markdown
+    autocmd BufRead,BufNewFile *.md setlocal textwidth=80
 
-  " Automatically wrap at 72 characters and spell check git commit messages
-  autocmd FileType gitcommit setlocal textwidth=72
-  autocmd FileType gitcommit setlocal spell
+    " Automatically wrap at 72 characters and spell check git commit messages
+    autocmd FileType gitcommit setlocal textwidth=72
+    autocmd FileType gitcommit setlocal spell
 
-  " Allow stylesheets to autocomplete hyphenated words
-  autocmd FileType css,scss,sass setlocal iskeyword+=-
+    " Allow stylesheets to autocomplete hyphenated words
+    autocmd FileType css,scss,sass setlocal iskeyword+=-
 augroup END
-
-" Softtabs, 4 spaces
-set tabstop=4
-set shiftwidth=4
-set shiftround
-set expandtab
-
-" tabs are 4 spaces for JS and CSS
-" autocmd FileType javascript setlocal tabstop=4 shiftwidth=4
-" autocmd FileType css,scss,sass setlocal tabstop=4 shiftwidth=4
 
 " Display extra whitespace
 set list listchars=tab:»·,trail:·,nbsp:·
 
+" tab functions
+set tabstop=4
+set shiftwidth=4
+set shiftround
+" set expandtab
+
+map <Leader>ss :set expandtab<CR>
+map <Leader>tt :set noexpandtab<CR>
+
+
 " Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
 if executable('ag')
-  " Use Ag over Grep
-  set grepprg=ag\ --nogroup\ --nocolor
+    " Use Ag over Grep
+    set grepprg=ag\ --nogroup\ --nocolor
 
-  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'
+    " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+    let g:ctrlp_user_command = 'ag %s -l --nocolor --hidden -g ""'
 
-  " ag is fast enough that CtrlP doesn't need to cache
-  let g:ctrlp_use_caching = 0
+    " ag is fast enough that CtrlP doesn't need to cache
+    let g:ctrlp_use_caching = 0
 endif
-
-" Make it obvious where 80 characters is
-" set textwidth=80
-" set colorcolumn=+1
 
 " Numbers
 set relativenumber
@@ -110,9 +140,6 @@ endfunction
 inoremap <Tab> <c-r>=InsertTabWrapper()<cr>
 inoremap <S-Tab> <c-n>
 
-" Exclude Javascript files in :Rtags via rails.vim due to warnings when parsing
-let g:Tlist_Ctags_Cmd="ctags --exclude='*.js'"
-
 " Index ctags from any project, including those outside Rails
 map <Leader>ct :!ctags -R .<CR>
 
@@ -124,11 +151,6 @@ nnoremap <Left> :echoe "Use h"<CR>
 nnoremap <Right> :echoe "Use l"<CR>
 nnoremap <Up> :echoe "Use k"<CR>
 nnoremap <Down> :echoe "Use j"<CR>
-
-" vim-rspec mappings
-nnoremap <Leader>t :call RunCurrentSpecFile()<CR>
-nnoremap <Leader>s :call RunNearestSpec()<CR>
-nnoremap <Leader>l :call RunLastSpec()<CR>
 
 " Run commands that require an interactive shell
 nnoremap <Leader>r :RunInInteractiveShell<space>
@@ -150,7 +172,7 @@ nnoremap <C-l> <C-w>l
 let g:syntastic_check_on_open=1
 let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute \"ng-"]
 let g:syntastic_eruby_ruby_quiet_messages =
-    \ {"regex": "possibly useless use of a variable in void context"}
+            \ {"regex": "possibly useless use of a variable in void context"}
 
 " Set spellfile to location that is guaranteed to exist, can be symlinked to
 " Dropbox or kept in Git and managed outside of thoughtbot/dotfiles using rcm.
@@ -162,20 +184,50 @@ set complete+=kspell
 " Always use vertical diffs
 set diffopt+=vertical
 
-" Local config
-if filereadable($HOME . "/.vimrc.local")
-  source ~/.vimrc.local
-endif
-
+" function to toggle numbers
 function! NumberToggle()
-  if(&relativenumber == 1)
-    set norelativenumber
-    set number
-  else
-    set relativenumber
-    set number
-  endif
+    if(&relativenumber == 1)
+        set norelativenumber
+        set number
+    else
+        set relativenumber
+        set number
+    endif
 endfunc
+
+" function to toggle highlight
+function! HighlightToggle()
+    if(&hls == 1)
+        set nohls
+    else
+        set hls
+    endif
+endfunc
+
+" function to toggle tab/spaces
+function! TabToggle()
+    if(&expandtab == 1)
+        set noexpandtab
+    else
+        set expandtab
+    endif
+endfunc
+
+" function to tab length
+function! TabNum4()
+    set tabstop=4
+    set shiftwidth=4
+endfunc
+
+function! TabNum2()
+    set tabstop=2
+    set shiftwidth=2
+endfunc
+
+" Incsearch implementation
+map /  :set hls<cr><Plug>(incsearch-forward)
+map ?  <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
 
 " paste without format
 map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
@@ -184,4 +236,12 @@ map <Leader>i mmgg=G`m
 " change numbering
 map <Leader>n :call NumberToggle()<cr>
 " no highlight
-map <Leader>h :nohl<cr>
+map <Leader>h :call HighlightToggle()<cr>
+" space to tabs
+map <Leader>t :set noexpandtab<cr>
+" tabs to space
+map <Leader>s :set expandtab<cr>
+" 2 tabs
+map <Leader>2 :call TabNum2()<cr>
+" 4 tabs
+map <Leader>4 :call TabNum4()<cr>
